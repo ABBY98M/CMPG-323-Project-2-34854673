@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace _34854673_Project_2_API.Models;
+namespace API_Project_2_34854673.Models;
 
 public partial class JobTelemetry
 {

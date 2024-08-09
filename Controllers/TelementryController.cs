@@ -4,7 +4,7 @@ using API_Project_2_34854673.Data;
 using API_Project_2_34854673.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API_Project_2_34854673.Data;
+
 
 
 namespace API_Project_2_34854673.Controllers
