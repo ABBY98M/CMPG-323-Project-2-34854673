@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API_Project_2_34854673.Models;
+namespace _34854673_Project_2_API.Models;
 
 public partial class JobTelemetry
 {
@@ -30,4 +30,5 @@ public partial class JobTelemetry
     public string? AdditionalInfo { get; set; }
 
     public DateTime EntryDate { get; set; }
+
 }
