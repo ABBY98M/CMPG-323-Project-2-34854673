@@ -31,4 +31,7 @@ public partial class JobTelemetry
 
     public DateTime EntryDate { get; set; }
 
+    public Guid? ProjectID { get; set; } // Add ProjectID property
+    // Add ClientID property to link to a client
+    public Guid? ClientID { get; set; }
 }
