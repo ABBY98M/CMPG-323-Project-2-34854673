@@ -9,7 +9,7 @@ public partial class NwutechTrendsContext : DbContext
     public NwutechTrendsContext()
     {
     }
-    //
+  
 
     public NwutechTrendsContext(DbContextOptions<NwutechTrendsContext> options)
         : base(options)
