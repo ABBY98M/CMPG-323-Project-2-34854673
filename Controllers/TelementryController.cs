@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using API_Project_2_34854673.Data;
 using API_Project_2_34854673.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,36 +8,27 @@ using System.Threading.Tasks;
 
 namespace API_Project_2_34854673.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class TelemetryController : ControllerBase
+    [ApiController]
+    public class JobTelemetryController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly NwutechTrendsContext _context;
 
-        public TelemetryController(AppDbContext context)
+        public JobTelemetryController(NwutechTrendsContext context)
         {
             _context = context;
         }
 
-        // GET: api/telemetry
-        [HttpGet("{id}")]
-        public async Task<ActionResult<JobTelemetry>> GetTelemetryById(int id)
+        // GET: api/JobTelemetry
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<JobTelemetry>>> GetJobTelemetries()
         {
-            // Find the JobTelemetry entry by ID
-            var telemetryEntry = await _context.JobTelemetries.FindAsync(id);
-
-            // Check if the entry exists
-            if (telemetryEntry == null)
-            {
-                return NotFound();
-            }
-
-            // Return the entry if found
-            return Ok(telemetryEntry);
+            return await _context.JobTelemetries.ToListAsync();
         }
 
+        // GET: api/JobTelemetry/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetJobTelemetryById(int id)
+        public async Task<ActionResult<JobTelemetry>> GetJobTelemetry(int id)
         {
             var jobTelemetry = await _context.JobTelemetries.FindAsync(id);
 
@@ -47,181 +37,97 @@ namespace API_Project_2_34854673.Controllers
                 return NotFound();
             }
 
-            return Ok(jobTelemetry);
+            return jobTelemetry;
         }
 
-
-        /// POST: api/JobTelemetry
+        // POST: api/JobTelemetry
         [HttpPost]
-        public async Task<IActionResult> CreateJobTelemetry([FromBody] JobTelemetry jobTelemetry)
+        public async Task<ActionResult<JobTelemetry>> PostJobTelemetry(JobTelemetry jobTelemetry)
         {
-            if (jobTelemetry == null)
-            {
-                return BadRequest("JobTelemetry data is null.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _context.JobTelemetries.Add(jobTelemetry);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetJobTelemetryById), new { id = jobTelemetry.Id }, jobTelemetry);
-        }
-
-        private bool JobTelemetryExists(int id)
-        {
-            // Check if the JobTelemetry entry exists
-            return _context.JobTelemetries.Any(e => e.Id == id);
+            return CreatedAtAction(nameof(GetJobTelemetry), new { id = jobTelemetry.Id }, jobTelemetry);
         }
 
         // PATCH: api/JobTelemetry/{id}
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchJobTelemetry(int id, [FromBody] JobTelemetry updatedTelemetry)
+        public async Task<IActionResult> PatchJobTelemetry(int id, JobTelemetry jobTelemetry)
         {
-            // Check if the ID exists
-            var existingTelemetry = await _context.JobTelemetry.FindAsync(id);
-            if (existingTelemetry == null)
+            if (id != jobTelemetry.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!JobTelemetryExists(id))
             {
                 return NotFound();
             }
 
-            // Update only the fields that were provided in the request
-            if (updatedTelemetry.ProccesId != null)
-            {
-                existingTelemetry.ProccesID = updatedTelemetry.ProccesId;
-            }
-            if (updatedTelemetry.JobId != null)
-            {
-                existingTelemetry.JobID = updatedTelemetry.JobId;
-            }
-            // Add more fields to update as necessary
-            // ...
-
-            // Save changes to the database
+            _context.Entry(jobTelemetry).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Unable to save changes.");
+                throw;
             }
 
             return NoContent();
         }
 
-
-        // PATCH: api/telemetry/{id}
-        
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateJobTelemetry(int id, [FromBody] JsonPatchDocument<JobTelemetry> patchDoc)
-        {
-            if (patchDoc == null)
-            {
-                return BadRequest("Patch document cannot be null.");
-            }
-
-            var jobTelemetry = await _context.JobTelemetries.FindAsync(id);
-
-            if (jobTelemetry == null)
-            {
-                return NotFound();
-            }
-
-            patchDoc.ApplyTo(jobTelemetry, ModelState);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!JobTelemetryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        */
-
-        // DELETE: api/telemetry/{id}
+        // DELETE: api/JobTelemetry/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteJobTelemetry(int id)
         {
-            var jobTelemetry = await _context.JobTelemetries.FindAsync(id);
-
-            if (jobTelemetry == null)
+            if (!JobTelemetryExists(id))
             {
                 return NotFound();
             }
 
-            _context.JobTelemetries.Remove(jobTelemetry);
+            var jobTelemetry = await _context.JobTelemetries.FindAsync(id);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!JobTelemetryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.JobTelemetries.Remove(jobTelemetry);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        // GET: api/telemetry/savings
-        [HttpGet("savings")]
-        public async Task<IActionResult> GetSavings([FromQuery] Guid projectId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] Guid clientId)
+        // GET: api/JobTelemetry/GetSavingsByProject
+        [HttpGet("GetSavingsByProject")]
+        public async Task<ActionResult> GetSavingsByProject(Guid projectId, DateTime startDate, DateTime endDate)
         {
-            // Query the database for telemetry data within the specified date range and project ID
             var telemetryData = await _context.JobTelemetries
-                .Where(t => t.ProjectID == projectId &&
-                            t.ClientID == clientId &&
-                            t.EntryDate >= startDate &&
-                            t.EntryDate <= endDate)
+                .Where(t => t.ProjectId == projectId && t.EntryDate >= startDate && t.EntryDate <= endDate)
                 .ToListAsync();
 
-            // Calculating the cumulative time and cost saved
             var cumulativeTimeSaved = telemetryData.Sum(t => t.HumanTime ?? 0);
-          
-            var cumulativeCostSaved = 0; 
-            // Creating an anonymous  to return the results
-            var result = new
-            {
-                ProjectID = projectId,
-                StartDate = startDate,
-                EndDate = endDate,
-                CumulativeTimeSaved = cumulativeTimeSaved,
-                CumulativeCostSaved = cumulativeCostSaved
-            };
+            var cumulativeCostSaved = cumulativeTimeSaved * 0.1; // Example calculation for cost saved
 
-            return Ok(result);
+            return Ok(new { CumulativeTimeSaved = cumulativeTimeSaved, CumulativeCostSaved = cumulativeCostSaved });
         }
 
+        // GET: api/JobTelemetry/GetSavingsByClient
+        [HttpGet("GetSavingsByClient")]
+        public async Task<ActionResult> GetSavingsByClient(Guid clientId, DateTime startDate, DateTime endDate)
+        {
+            var telemetryData = await _context.JobTelemetries
+                .Join(_context.Projects, t => t.ProjectId, p => p.ProjectId, (t, p) => new { t, p })
+                .Where(tp => tp.p.ClientId == clientId && tp.t.EntryDate >= startDate && tp.t.EntryDate <= endDate)
+                .Select(tp => tp.t)
+                .ToListAsync();
 
+            var cumulativeTimeSaved = telemetryData.Sum(t => t.HumanTime ?? 0);
+            var cumulativeCostSaved = cumulativeTimeSaved * 0.1;
 
+            return Ok(new { CumulativeTimeSaved = cumulativeTimeSaved, CumulativeCostSaved = cumulativeCostSaved });
+        }
+
+        private bool JobTelemetryExists(int id)
+        {
+            return _context.JobTelemetries.Any(e => e.Id == id);
+        }
     }
 
 }
