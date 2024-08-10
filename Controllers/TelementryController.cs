@@ -115,7 +115,7 @@ namespace API_Project_2_34854673.Controllers
 
 
         // PATCH: api/telemetry/{id}
-        /*
+        
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateJobTelemetry(int id, [FromBody] JsonPatchDocument<JobTelemetry> patchDoc)
         {
