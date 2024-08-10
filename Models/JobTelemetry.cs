@@ -33,5 +33,5 @@ public partial class JobTelemetry
 
     public Guid? ProjectID { get; set; } // Add ProjectID property
     // Add ClientID property to link to a client
-    public Guid? ClientID { get; set; }
+    public Guid? ClientID { get; set; }//update
 }
