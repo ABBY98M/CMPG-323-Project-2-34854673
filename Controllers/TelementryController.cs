@@ -77,8 +77,45 @@ namespace API_Project_2_34854673.Controllers
             return _context.JobTelemetries.Any(e => e.Id == id);
         }
 
-        /*
+        // PATCH: api/JobTelemetry/{id}
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchJobTelemetry(int id, [FromBody] JobTelemetry updatedTelemetry)
+        {
+            // Check if the ID exists
+            var existingTelemetry = await _context.JobTelemetry.FindAsync(id);
+            if (existingTelemetry == null)
+            {
+                return NotFound();
+            }
+
+            // Update only the fields that were provided in the request
+            if (updatedTelemetry.ProccesId != null)
+            {
+                existingTelemetry.ProccesID = updatedTelemetry.ProccesId;
+            }
+            if (updatedTelemetry.JobId != null)
+            {
+                existingTelemetry.JobID = updatedTelemetry.JobId;
+            }
+            // Add more fields to update as necessary
+            // ...
+
+            // Save changes to the database
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Unable to save changes.");
+            }
+
+            return NoContent();
+        }
+
+
         // PATCH: api/telemetry/{id}
+        /*
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateJobTelemetry(int id, [FromBody] JsonPatchDocument<JobTelemetry> patchDoc)
         {
