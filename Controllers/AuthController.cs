@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using API_Project_2_34854673.Models; // Adjust based on your actual namespace
+using API_Project_2_34854673.Models; 
 
 namespace API_Project_2_34854673.Controllers
 {
@@ -20,14 +20,21 @@ namespace API_Project_2_34854673.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel login)
+        public async Task<IActionResult> Login([FromBody] LoginModel? login)
         {
-            
+            // Code for checking if  login object is null
+            if (login == null || string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
+            {
+                return BadRequest("Invalid login request.");
+            }
+
+            // Validate user credentials 
             if (login.Username != "testuser" || login.Password != "CMPG323")
             {
                 return Unauthorized();
             }
 
+            // Generate JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -46,12 +53,5 @@ namespace API_Project_2_34854673.Controllers
 
             return Ok(new { Token = tokenString });
         }
-    }
-
-  
-    public class LoginModel
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
     }
 }
