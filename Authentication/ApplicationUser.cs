@@ -1,6 +1,9 @@
-﻿namespace API_Project_2_34854673.Authentication
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace API_PROJECT.Authentication
 {
-    public class ApplicationUser
+    public class ApplicationUser : IdentityUser
     {
+     
     }
 }
