@@ -1,19 +1,17 @@
 ﻿using API_Project_2_34854673.Authentication;
-using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace JWTAuthentication.Controllers
+namespace API_Project_2_34854673.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

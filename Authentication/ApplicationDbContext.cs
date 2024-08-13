@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace API_PROJECT.Authentication
+namespace API_Project_2_34854673.Authentication
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
