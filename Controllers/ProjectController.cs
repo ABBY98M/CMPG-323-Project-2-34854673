@@ -10,7 +10,7 @@ namespace API_Project_2_34854673.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+  
     public class ProjectController : ControllerBase
     {
         private readonly NwutechTrendsContext _context;
