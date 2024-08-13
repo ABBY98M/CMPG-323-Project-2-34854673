@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API_Project_2_34854673.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SavingsController : ControllerBase
     {
         private readonly NwutechTrendsContext _context;
@@ -27,7 +29,7 @@ namespace API_Project_2_34854673.Controllers
                 .ToListAsync();
 
             var cumulativeTimeSaved = telemetryData.Sum(t => t.HumanTime ?? 0);
-            var cumulativeCostSaved = cumulativeTimeSaved * 0.1; // Example calculation for cost saved
+            var cumulativeCostSaved = cumulativeTimeSaved * 0.1; 
 
             return Ok(new { CumulativeTimeSaved = cumulativeTimeSaved, CumulativeCostSaved = cumulativeCostSaved });
         }

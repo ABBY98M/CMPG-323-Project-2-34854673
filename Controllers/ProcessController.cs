@@ -4,11 +4,13 @@ using API_Project_2_34854673.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API_Project_2_34854673.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProcessController : ControllerBase
     {
         private readonly NwutechTrendsContext _context;
